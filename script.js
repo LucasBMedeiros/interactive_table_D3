@@ -5,10 +5,10 @@ script.onload = function() {
     // Assuming window.datasets is already available in Domo environment
     var data = window.datasets.map(d => ({
         "Incident ID": d["Incident ID"],
-        "Date": new Date(d.Date), // Convert Date to a Date object
         "Color": d.Color,
-        "Business Impact": d["Business Impact"],
         "Cause": d.Cause,
+        "Date": new Date(d.Date), // Convert Date to a Date object
+        "Business Impact": d["Business Impact"],
         "Impacted Apps": d["Impacted Apps"],
         "Impacted Clients": d["Impacted Clients"]
     }));
@@ -25,7 +25,7 @@ script.onload = function() {
         // Append header row
         thead.append("tr")
             .selectAll("th")
-            .data(["Incident ID", "Date", "Color", "Business Impact", "Cause", "Impacted Apps", "Impacted Clients"])
+            .data(["Incident ID", "Color", "Cause", "Date", "Business Impact", "Impacted Apps", "Impacted Clients"])
             .enter()
             .append("th")
             .text(d => d);
@@ -40,10 +40,10 @@ script.onload = function() {
         rows.selectAll("td")
             .data(d => [
                 d["Incident ID"],
-                d.Date.toLocaleDateString(), // Format the date
                 d.Color,
-                d["Business Impact"],
                 d.Cause,
+                d.Date.toLocaleDateString(), // Format the date
+                d["Business Impact"],
                 d["Impacted Apps"],
                 d["Impacted Clients"]
             ])
@@ -66,4 +66,3 @@ script.onload = function() {
     document.getElementById("filter-button").addEventListener("click", filterData);
 };
 document.head.appendChild(script);
-
