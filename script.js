@@ -6,12 +6,21 @@ script.onload = function() {
     var datasets = window.datasets;
     console.log("Initial datasets:", datasets);
 
+    // Ensure datasets is an array and has the expected structure
+    if (!Array.isArray(datasets) || datasets.length === 0) {
+        console.error("Datasets is not an array or is empty");
+        return;
+    }
+
+    // Log the structure of the first dataset item for verification
+    console.log("First dataset item structure:", datasets[0]);
+
     // Map the data to the desired structure
     var data = datasets.map(d => ({
         "Incident ID": d["Incident ID"],
         "Color": d.Color,
         "Cause": d.Cause,
-        "Date": d.Date, // Use the Date directly
+        "Date": d.Date, // Assuming Date is already in date type
         "Business Impact": d["Business Impact"],
         "Impacted Apps": d["Impacted Apps"],
         "Impacted Clients": d["Impacted Clients"]
@@ -55,7 +64,10 @@ script.onload = function() {
             ])
             .enter()
             .append("td")
-            .text(d => d);
+            .text(d => {
+                console.log("Appending cell with data:", d); // Debug each cell data
+                return d;
+            });
 
         console.log("Table rendered with data:", filteredData);
     }
@@ -67,6 +79,7 @@ script.onload = function() {
     function filterData() {
         const filterValue = document.getElementById("filter-input").value.toLowerCase();
         const filteredData = data.filter(d => d["Impacted Clients"].toLowerCase().includes(filterValue));
+        console.log("Filtered data:", filteredData); // Log filtered data
         renderTable(filteredData);
     }
 
