@@ -2,27 +2,22 @@
 var script = document.createElement('script');
 script.src = 'https://d3js.org/d3.v7.min.js';
 script.onload = function() {
-    // Assuming window.datasets is already available in Domo environment
-    var data = window.datasets.map(d => {
-        // Attempt to convert the date to a valid JavaScript Date object
-        let parsedDate = new Date(d.Date);
-        if (isNaN(parsedDate)) {
-            // If the direct conversion fails, try parsing it as a string
-            parsedDate = new Date(Date.parse(d.Date));
-        }
+    // Check if datasets are loaded correctly
+    var datasets = window.datasets;
+    console.log("Initial datasets:", datasets);
 
-        return {
-            "Incident ID": d["Incident ID"],
-            "Color": d.Color,
-            "Cause": d.Cause,
-            "Date": parsedDate, // Use the parsed date
-            "Business Impact": d["Business Impact"],
-            "Impacted Apps": d["Impacted Apps"],
-            "Impacted Clients": d["Impacted Clients"]
-        };
-    });
+    // Map the data to the desired structure
+    var data = datasets.map(d => ({
+        "Incident ID": d["Incident ID"],
+        "Color": d.Color,
+        "Cause": d.Cause,
+        "Date": d.Date, // Use the Date directly
+        "Business Impact": d["Business Impact"],
+        "Impacted Apps": d["Impacted Apps"],
+        "Impacted Clients": d["Impacted Clients"]
+    }));
 
-    console.log("Data after parsing:", data);
+    console.log("Data after mapping:", data);
 
     // Function to render table
     function renderTable(filteredData) {
@@ -53,7 +48,7 @@ script.onload = function() {
                 d["Incident ID"],
                 d.Color,
                 d.Cause,
-                d.Date instanceof Date && !isNaN(d.Date) ? d.Date.toLocaleDateString() : "Invalid Date",
+                new Date(d.Date).toLocaleDateString(), // Format the date
                 d["Business Impact"],
                 d["Impacted Apps"],
                 d["Impacted Clients"]
@@ -65,7 +60,7 @@ script.onload = function() {
         console.log("Table rendered with data:", filteredData);
     }
 
-    // Initial rendering
+    // Initial rendering with full data
     renderTable(data);
 
     // Filter function
